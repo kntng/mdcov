@@ -1,0 +1,15 @@
+name: Markdown Coverage
+description: Write lcov output as markdown to PRs
+author: covbot
+
+inputs:
+  github-token:
+    description: Github token from ${{ secrets.GITHUB_TOKEN }} in order to write changes to PR comments
+    required: true
+  lcov-path:
+    description: Path to LCOV file to read from to display in PR comment
+    required: true
+
+runs:
+  using: node20
+  main: dist/index.js
