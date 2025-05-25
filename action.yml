@@ -2,6 +2,10 @@ name: Markdown Coverage
 description: Write lcov output as markdown to PRs
 author: covbot
 
+branding:
+  icon: "check-circle"
+  color: "green"
+
 inputs:
   github-token:
     description: Github token from ${{ secrets.GITHUB_TOKEN }} in order to write changes to PR comments
