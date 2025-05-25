@@ -8,7 +8,7 @@ branding:
 
 inputs:
   github-token:
-    description: Github token from ${{ secrets.GITHUB_TOKEN }} in order to write changes to PR comments
+    description: Github token in order to write changes to PR comments
     required: true
   lcov-path:
     description: Path to LCOV file to read from to display in PR comment
