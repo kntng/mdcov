@@ -1,5 +1,6 @@
 {
   "name": "mdcov",
+  "version": "1.0.1",
   "module": "dist/index.js",
   "type": "module",
   "private": true,
