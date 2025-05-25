@@ -1,7 +1,5 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
-import * as cache from "@actions/cache";
-import crypto from "crypto";
 import fs from "fs";
 
 interface Target {
@@ -253,25 +251,7 @@ async function run() {
     return;
   }
 
-  // Check if cache hit
-  if (!fs.existsSync(lcovPath)) {
-    core.error("lcov-path does not exist.");
-    return;
-  }
-
   const lcov = fs.readFileSync(lcovPath, "utf-8");
-  const hash = crypto.createHash('sha256').update(lcov).digest('hex');
-  const cacheKey = `lcov-${hash}`;
-  const cacheHit = await cache.restoreCache([".cache"], cacheKey);
-
-  if (cacheHit) {
-    core.info("Cache hit: lcov file unchanged, skipping.")
-    return;
-  } else {
-    core.info("Cache miss: updating coverage information.")
-    await cache.saveCache(['.cache'], cacheKey);
-  }
-
   const records = parseLcov(lcov);
   if (!records.length) {
     core.setFailed(`File at ${lcovPath} has no coverage records.`);
