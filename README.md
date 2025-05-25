@@ -1,15 +1,59 @@
-# mdcov
+# :memo: mdcov
 
-To install dependencies:
+Generate coverage reports in markdown for GitHub PRs.
 
-```bash
-bun install
+## Usage
+
+In your workflow `.yml` file use the following step:
+
+```yaml
+- uses: kntng/mdcov@v1
+  with:
+    github-token: ${{ secrets.GITHUB_TOKEN }}
+    lcov-path: coverage/lcov.info
 ```
 
-To run:
+replacing `coverage/lcov.info` with the proper path to the coverage file.
 
-```bash
-bun run index.ts
+Note this action requires additional permissions on the token to write to pull requests, so add the following:
+
+```yaml
+permissions:
+  issues: write
+  pull-requests: write
 ```
 
-This project was created using `bun init` in bun v1.2.11. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+## Example
+
+A simple example triggers on pull requests. It checks out the repository, runs coverage, then uses the action to write the report to the PR.
+
+```yaml
+name: Code Coverage
+
+on:
+  pull_request:
+    paths:
+      - "**/*.ts"
+      - "**/*.js"
+      - ".github/workflows/coverage.yml"
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  coverage:
+    name: Run coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Run coverage
+        run: bun run coverage
+      - uses: kntng/mdcov@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          lcov-path: coverage/lcov.info
+```
